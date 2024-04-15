@@ -1,0 +1,108 @@
+\section{Thursday, February 8th}
+\subsection{Logistics}
+
+\begin{itemize}
+    \item Refined learning goals due February 15.
+    \item Quiz 2 (on Coding + AEP) next Thursday.
+\end{itemize}
+
+\subsection{Three Perspectives on Entropy}
+
+We will start with three perspectives on Entropy:
+
+\begin{enumerate}
+    \item Compression: The shortest description.
+    \item Randomness: A measure of randomness that cannot be created by any deterministic processing.
+    \item Typically (the AEP): Typical events have \( \log(p) \approx \) entropy.
+\end{enumerate}
+
+\subsection{Efficiency}
+
+Mappings: \( Y = f(X) \)
+
+Efficiency is given by the formula:
+\begin{equation*}
+    \eta(f \,|\, |X| = \mu, p) = \eta(f; |X| = \mu, p) = \frac{\mathbb{E}[|Y|]}{m} = \frac{\mathbb{E}[|f(X)|]}{m}
+\end{equation*}
+
+\textbf{Question:} What is the maximum of \( \eta \) subject to \( f \)?
+
+``Uncertainty in the output \( \leq \) uncertainty in the input.''
+
+\begin{align*}
+    H[X] &= H[X_1, \ldots, X_m] \\
+         &= \sum_{j=1}^m H[X_j] \quad \text{by independence} \\
+         &= m \cdot H[X_1] \quad \text{where } H[X_1] = H(p,1-p)
+\end{align*}
+
+Suppose \( Y \) is uniform over \( 2^n \):
+
+\begin{align*}
+    H[Y] &= H[|Y|] + H[Y \,|\, |Y|] \quad \text{by conditioning on } |Y| \\
+         &= H[|Y|] + \mathbb{E}_n[H[Y \,|\, |Y|=n]] \\
+         &= H[|Y|] + \mathbb{E}_Y[|Y|] \\
+         &\leq H[X] \quad \text{Using the inequality proved below.} \\
+         &= m \cdot H[X_1]
+\end{align*}
+
+This then allows us to say:
+\begin{equation*}
+    \eta = \frac{\mathbb{E}[|f(X)|]}{m} \leq H[X_1] - \frac{1}{m} H[|Y|]
+\end{equation*}
+which asymptotically makes the last term go to \( 0 \). Thus \( \eta \leq H[X_1] \).
+
+\subsection{The Data Processing Inequality}
+
+\textbf{Claim:} For any deterministic mapping \( f \), if we let \( Y = f(X) \), then the amount of randomness in \( Y \), \( H[Y] \leq H[X] \).
+
+Suppose \( f \) is injective, which means unique inputs lead to unique outputs, then \( H[X] = H[Y] \) for any choice of labels.
+
+Instead, we group inputs for a non-injective \( f \) (where \( f \) is not one-to-one). Then
+\begin{align*}
+    H[X] &= H[Y] + H[X \,|\, Y] \quad \text{and since } H[X \,|\, Y] \geq 0, \\
+    &\text{we know that } H[X] \geq H[Y].
+\end{align*}
+
+\hrulefill
+
+\subsection{Asymptotic Equipartition Property (AEP)}
+
+The Asymptotic Equipartition Property (AEP) states that most sample \( n \)-sequences of an ergodic process have probability about \( 2^{-nH} \) and that there are about \( 2^{nH} \) such typical sequences. If \( X_1, \ldots, X_n \) and \( X_j \) are iid\textasciitilde \( p \):
+
+\begin{equation*}
+-\frac{1}{n}\log\left(\underbrace{p(X_1,\ldots,X_n)}_{p(X_1) \cdot \ldots \cdot p(X_n)}\right) \xrightarrow{\text{i.p.}}  H[X_1] \quad \text{as} \quad n \to \infty.
+\end{equation*}
+
+\begin{equation*}
+-\frac{1}{n} \sum_{j=1}^n \log(p(x_j)) \to -\mathbb{E}_X[\log(p(X))].
+\end{equation*}
+
+\subsubsection{Typical Set}
+
+The typical set \( A_{\varepsilon}^{(n)} \), if \( x_1, \ldots, x_n \in A_{\varepsilon}^{(n)} \) then \( x_1, \ldots, x_n \) is typical:
+
+\begin{equation*}
+A_{\varepsilon}^{(n)} = \left\{x_1, \ldots, x_n \mid -\log(p(x_1, \ldots, x_n)) \in [H[X] - \varepsilon, H[X] + \varepsilon]\right\}.
+\end{equation*}
+
+\subsubsection{Properties}
+
+\begin{enumerate}
+    \item \( \left|A_{\varepsilon}^{(n)}\right| \leq 2^{n(H[X]+\varepsilon)} \implies p(x_1, \ldots, x_n) \in [2^{-n(H[X] + \varepsilon)}, 2^{-n(H[X] - \varepsilon)}] \) which can be read as: "elements of the typical set are all \( \mathcal{X} \) equiprobable"
+    \item \( \Pr\left[x^{(n)} \in A_{\varepsilon}^{(n)}\right] \geq 1-\varepsilon \equiv \Pr\left[x_1, \ldots, x_n \in A_{\varepsilon}^{(n)}\right] \xrightarrow{n \to \infty} 1 \) for any \( \varepsilon > 0 \) with high probability.
+    \item \( \left|A_{\varepsilon}^{(n)}\right| \in [(1-\varepsilon) 2^{n(H[X] - \varepsilon)}, 2^{n(H[X] + \varepsilon)}] \) for \( n \) sufficiently large.
+\end{enumerate}
+
+\subsubsection{Typicality}
+
+If \( X_1, \ldots, X_n \) and we let \( H \) be the number of heads.
+
+\begin{equation*}
+p(x_1, \ldots, x_n) = p^{h(x)} (1-p)^{n - h(x)}
+\end{equation*}
+
+\begin{equation*}
+\log(p(x_1, \ldots, x_n)) = \log\left(p^{h(x)} (1-p)^{n - h(x)}\right) = h(x)\log(p) + (n - h(x)) \cdot \log(1 - p)
+\end{equation*}
+
+Typicality cares about the multiplicity of outcomes.

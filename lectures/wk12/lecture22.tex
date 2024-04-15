@@ -1,0 +1,192 @@
+\section{Thursday, April 9th}
+\subsection{Logistics}
+\begin{itemize}
+    \item Reading Posted (7.1 - 7.3)
+    \item Discussion due Thurs
+    \item Project Part 5 due Thurs.
+    \item Quiz 6 retake tmrw.
+    \item Quiz 7 Thurs: Only on \textbf{Mixing Inequalities}.
+\end{itemize}
+
+\subsection{Hierarchy of Models}
+\subsubsection{Stochastic Thermodynamics}
+Thermodynamics is a statistical theory which works across scales of physical systems. Today we will focus on the intermediate scale of Mesoscopic. This field is known as Statistical Thermodynamics or Stochastic Thermodynamics.
+
+Recall the conserved principles we decided to enforce from last lecture:
+\begin{enumerate}
+    \item $\approx$Markov (assume time-scale separation/adiabatic limit allows us to assume memorylessness at this scale)
+    \item Time is cts.
+    \item Process is autonomous
+    \item Some(?) form of time-reversal symmetry$^\ast$
+    \begin{itemize}
+        \item By enforcing the correct properties, we can conserve the correct properties. Today we will get more specific to this end.
+        \item We could enforce a very strong form of symmetry and get results but these would not be \textit{interesting} results as we are then restricted to a very small subset which is the class of symmetric models.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{CT Review from Last Lecture}
+Transition matrices can be constructed from the rate matrices through the matrix exponential: $p(t+\Delta t)=e^{R\Delta t}p(0)\implies p(t)=e^{Rt}p(0)$.
+
+\subsection{Model}
+We have CT finite (Discrete-State) MC which is autonomous (we know or can track all relevant d.o.f. for the dynamics).
+
+We also want reversibility, microscopic reversibility: means any time $i\to j$, you can also go $j\to i$.\\
+Thus if $r_{ij}>0\implies r_{ji}>0$.
+
+\subsubsection{Stronger Symmetry}
+\begin{important}
+\begin{equation}
+    r_{ij} = r_{ji}
+\end{equation}
+but this is \textit{too} limiting: it only yields $p_s\sim\Uniform$.
+\end{important}
+
+\subsubsection{A better Symmetry}
+Examining the stationary distribution, we want symmetry in probability flux -- of steady-state ($r_{i j} p_{{s}_{j}} = r_{j i} p_{s_i} \forall{i, j}$): if $p=p_s$ where $p_s=\pi$ is the stationary distribution.
+
+\subsubsection{Ensembled Indistinguishability is the same as Probability flux symmetry}
+The former states: If $p(0)=p_s$ then it's not possible to distinguish a trajectory, run fwd in time from one run backwards in time.
+
+Both are equivalent ways of saying that the stoch proc $X(t)$ obeys DBEs.
+
+\subsection{Probability Fluxes}
+\begin{align}
+J_{ij}(p) & =r_{i j} P_j \\
+\Big(\frac{d}{d t} P_i(t) & =\text { flux in - flux out }\Big)
+\end{align}
+
+\subsection{Stationarity:}
+\subsubsection{Complex Balance:}
+\begin{equation}
+\underbrace{\sum_{j \neq i} r_{i j} P_{s_j}}_{\text{total in}} 
+= \underbrace{\left[\sum_{j \neq_i} r_{j i}\right] 
+P_{s_i}}_{\text{total out}}
+\end{equation}
+
+\subsubsection{Detailed Balance:}
+\begin{equation}
+r_{i j} p_{{s}_{j}} = r_{j i} p_{s_i} \forall{i, j}
+\end{equation}
+
+\subsection{Theorem}
+A CT discrete-state (finite) MC satisfies DBEs if:
+\begin{flalign}
+    \text{at steady-state: } & J_{ij}(p_s) = J_{ji}(p_s)
+    \label{eq:flux-at-steady-state}
+    \\
+    \text{time-reversal symmetry of the ensemble } 
+    &
+    \text{if initialized at steady-state.}
+    \label{eq:time-reversal-symmetry-ensemble}
+    \\
+    \text{Defn.: $\E$[Production rate of a quantity $q$]} &= \sum_{i<j} \Delta q_{ij} \left(J_{ij}(p) - J_{ji}(p)\right)
+    \label{eq:prod-rate}
+    \\
+    \text{Given $|C|$ cycles, you obeys DBEs} & \iff \sum_{j=1}^{|C|}\ln(\frac{r_{x_{j+1} x_j}
+    }{r_{x_{j}, x_{j+1}}})=0
+    \label{eq:cycle-sum-log-ratio-of-rates}
+\end{flalign}
+Note that all of these are 4 equivalent.
+
+\subsection{Open System}
+Imagine there are particles in a system (the particles can leave the system) and we want to track the current amount of particles in the finite and bounded reservoir at any given time. It is natural to utilize expectation for this task.
+
+\begin{important}
+What if eq. $\eqref{eq:prod-rate}$ is violated?
+\end{important}
+
+Then $\exists q\st$ the prod. at steady-state is $>0$.
+
+Thus at steady-state, we expect the  quantity to grow but by defn. of the stationary state we know this must be true at all future times as well. If we are constantly pulling a positive amount from a bounded finite system, then we will eventually run out.
+
+Since the stoch proc is ergodic, w.h.p., the total amnt. of quantity exchanged with the reservoir would grow w/o bound. Thus it is impossible for the reservoir to be bounded: the system is closed.
+
+Thus at steady-state,  eq. $\eqref{eq:prod-rate}=0$ in any $q$.
+
+\begin{align*}
+\forall \Delta q_{ij} &= -\Delta q_{ji} 
+\\
+\sum_{j < i} \Delta q_{ij} \underbrace{\left(J_{ij}(p) - J_{ji}(p)\right)}_{=0} &= 0
+\end{align*}
+This shows that eq. $\eqref{eq:flux-at-steady-state}\implies\text{eq. }\eqref{eq:prod-rate}$.
+
+\subsection{Forward Trajectory}
+We use the notation:
+\begin{align*}
+    \{
+    X^+(t)
+    \}_{t=0}^T
+    &= \{x_1, x_2, x_3, \ldots, x_n\}
+\end{align*}
+where $x_1=x(0), \quad x_n=x(T)$ with $\{\tau_1, \tau_2, \ldots, \tau_n\}$.
+
+\subsection{Backwards Trajectory}
+We use the notation:
+\begin{align*}
+    X^-(s)
+    &= X^+(T-s)
+\end{align*}
+which implies that:
+\begin{align}
+    p_s(x_1)\prod_{j=1}^{n-1} \Bar{r}_{x_j} e^{-\Bar{r}_{x_j}\tau_j} \frac{r_{x_{j+1}, x_j}}{\Bar{r}_{x_j}}
+    &= 
+    p_s(x_n)\prod_{i=1}^{n} 
+    e^{-\Bar{r}_{x_i}\tau_i} 
+    % \frac{r_{x_{i+1}, x_i}}{\Bar{r}_{x_iJ}}
+    \Bar{r}_{x_j} \\
+    \implies \left(\prod_{j=1}^n \frac{r_{x_{j+1} x_j}}{r_{x_j x_{j+1}}} \right) \frac{p_s(x_1)}{p_s(x_n)} &= 1
+\end{align}
+If we choose $x_n=x_1$ then $\frac{p_s(x_1)}{p_s(x_n)}=1$ no matter what the stationary probabilites specifically are. We have a cycle since we have a path which ends where it starts $\implies$ so if we take a $\log$ on both sides then we get that eq. $\eqref{eq:time-reversal-symmetry-ensemble}\implies\text{eq. }\eqref{eq:cycle-sum-log-ratio-of-rates}$.
+
+Finally we show that eq. $\eqref{eq:time-reversal-symmetry-ensemble}\implies \text{eq. }\eqref{eq:flux-at-steady-state}$:
+
+The simplest trajectory is one which only takes a single step. Thus we get that:
+\begin{align*}
+    \frac{r_{x_2 x_1} p_s(x_1)}{r_{x_1 x_2} p_s(x_2)} &= 1
+    \\
+    \implies 
+    r_{ij}p_{s_j}
+    &= 
+    r_{ji}p_{s_i}
+\end{align*}
+$\hfill\square$
+
+This gives us much more than a nullspace el. of the rate matrix, $Rp_s=0$, as is given by the CBE.
+
+\subsection{A cyclic property}
+For any cycle, that is, a sequence of states $\{x_1, x_2, \ldots, x_n, x_{n+1}=x_1\}$, we must have:
+\begin{equation}
+    \sum_{j=1}^n \ln\left(\frac{r_{x_{j+1} x_j}}{r_{x_1 x_{j+1}}}\right)
+    = 0
+\end{equation}
+
+\subsection{Line Integrals to define Energy as a quantity}
+If you have a path $P_1=\{i, x_2, \ldots, x_{m-1}, j\}$ and a path $P_2=\{i, y_2, \ldots, y_{\ell-1}, j\}$.
+
+\begin{align}
+    \sum_{\stackrel{n=1}{P_1}}^m \ln\left(\frac{r_{x_{n+1} x_n}}{r_{x_n x_{n+1}}}\right)
+    &= \sum_{\stackrel{n=1}{P_2}}^{\ell} \ln\left(\frac{r_{y_{n+1} y_{n}}}{r_{y_{n} y_{n+1}}}\right)
+\end{align}
+
+Then for the quantity $u(x)\in\bR$, the value of the path $x_0\to x_T$ sum of $\ln(\frac{r_\to}{r_{\leftarrow}})=u(x_0)-u(x_T), \quad \ln\left(\frac{r_{ij}}{r_{ji}}\right)=\underbrace{u_i-u_j}_{\Delta u_{ij}}$.
+
+Thus $\exists$ a scalar-valued quantity defined on the states: $u$ that is conserved between system + reservoir.
+
+This means $u$ = energy.
+
+\subsection{Boltzmann Distribution}
+1. $p_s(x)\propto e^{-u(x)}\implies \frac{p_{s_i}}{p_{s_j}} = \frac{r_{ij}}{r_{ji}}=e^{-(u_j-u_i)}$.
+
+\subsection{Equipartition}
+2. If $x, y\st u(x)=u(y)\implies p_s(x)=p_s(y)$.
+
+\subsection{Relationship to Work}
+3. $\ln(\frac{r_\to}{r_{\leftarrow}})\propto $ work required from $i\to j$.
+
+\subsection{Free Energy is decreasing}
+$D(p(t)\|q(t))$ is decreasing $\implies$ free energy is decr. $\implies$ properties of endothermic vs exothermic reactions.
+
+If \underline{closed}, then $u(x)=u(y)\quad\forall x, y$:
+\begin{equation}
+    H[X(t)] \text{ is increasing. } \ll \text{distribution-wise 2nd law.}
+\end{equation}

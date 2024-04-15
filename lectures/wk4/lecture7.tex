@@ -1,0 +1,82 @@
+\section{Tuesday, February 6th}
+\subsection{Kraft's Inequality and Code Construction}
+Kraft’s inequality points to an explicit construction. The action of us being able to actually construct it gives us an application from the inequality. Today we will prove it for \( |\mathcal{X}| < \infty \), instantaneous codes, list of lengths \( \ell=\{\ell_1, \ell_2, \ldots, \ell_{|\mathcal{X}|}\} \). 
+This is a code without prefixes so you don’t have to wait until you get the full code to realize if you have an antecedent or a child. Thus all messages are at leaves.
+
+This is most interesting when all the paths do not have the same lengths. We assign outcomes to some leaves, but not all possible leaves (a fact which is key for the inequality of Kraft), since we didn’t say in our encoding that all leaves should be used so we can skip some leaves if the answer to the question is only ever one answer. The usefulness of this is seen more easily in tertiary or higher trees. Now if we denote \( \ell_{\max} = \max_x\{\ell(x)\} \).
+
+If we completed the tree then we would have \( D^{\ell_{\max}} \) leaves on the \( \ell_{\max} \) ‘vertical bar’ if we draw the tree horizontally. 
+
+\begin{shaded}
+\textbf{Question:} If we take a stopping node, at depth \( \ell \), how many children would it have had at depth \( \ell_{\max} \)?
+\end{shaded}
+
+\textbf{Answer:} \( D^{\ell_{\max} - \ell} \).
+
+Expanding on this, if we sum over every \( x \), we get the following inequality: \( \sum_x D^{\ell_{\max} - \ell(x)} \leq D^{\ell_{\max}} \). Dividing both sides by \( D^{\ell_{\max}} \) gives Kraft’s inequality.
+
+\subsection{Constructive Approach}
+
+Let’s go through an example:
+Given a binary tree with \( \ell = \{1,2,4,4\} \), this satisfies Kraft’s inequality with the sum being \( \frac{7}{8} \) which tells us we are inefficient.
+
+\begin{center}
+\begin{tabular}{c c}
+X & c(x) \\
+\hline
+1 & 0 \\
+2 & 10 \\
+3 & 1100 \\
+4 & 1101 \\
+\end{tabular}
+\end{center}
+
+\textbf{Claim:} If \( X \sim p \), \( X \in \mathcal{X} \), \( |\mathcal{X}| < \infty \).
+
+\begin{itemize}
+    \item Let \( L = \mathbb{E}_X[\ell(X)] \).
+    \item Over all \( \ell=\{\ell_1, \ell_2, \ldots, \ell_{|\mathcal{X}|}\} \) such that Kraft’s inequality is satisfied then, for any code (i.e., any \( \ell \)’s satisfy) \( L \geq H_D[X] \).
+\end{itemize}
+
+\textbf{Proof:}
+\begin{align*}
+L - H_D[X] &= \mathbb{E}_X[\ell(x) + \log_D(p(X))] \\
+&= \mathbb{E}_{X \sim p}[\log_D(p(x) / D^{-\ell(x)})] \quad \text{which resembles a relative entropy}
+\end{align*}
+Define \( q(x) = D^{-\ell(x)} / Z \), where \( Z = \sum_x D^{-\ell(x)} \leq 1 \),
+\begin{align*}
+&= \mathbb{E}_{X \sim p}[\log_D(p(x) / (q(x) \cdot Z))] \\
+&= \mathbb{E}_{X \sim p}[\log_D(p(x) / q(x)) - \log_D(Z)] \\
+&= D(p || q) - \log_D\left(\sum_x D^{- \ell(x)}\right) \\
+&\geq 0 \quad \text{since both } D(p || q) \geq 0 \text{ and } -\log_D\left(\sum_x D^{- \ell(x)}\right) \geq 0. \\
+&\implies L \geq H_D[X]. \quad \text{QED.}
+\end{align*}
+
+We want short codewords to correspond to likely events and vice versa. Mathematically: \( D^{- \ell(x)} \approx p(x) \).
+
+\subsection{Small Group Activities: Programming \& Fano Codes}
+
+Now in small groups, we will tackle three activities:
+
+\begin{enumerate}
+    \item Show that the bounds are tight (can be achieved by some scheme) and what is the cost of misspecification? (What is the smallest expected code length using the Shannon code for the wrong prior?)
+    \begin{itemize}
+        \item We have no inefficiency if \( \sum_x D^{- \ell(x)} = \sum_x p(x) = 1 \implies \log_D\left(\sum_x D^{- \ell(x)}\right) = 0 \implies \ell(x) = -\log_D(p(x)) \). But \( \ell \) may not be an integer, so we will want to round up so we don’t exceed our bound, thus \( \ell(x) = \lceil -\log_D(p(x))\rceil \). If we define \( H_D[X] \leq L^* = \min_C \{ \mathbb{E}_X[\ell(X)] \} \leq \mathbb{E}_X[\lceil -\log_D(p(x))\rceil] \)
+        \[ < \mathbb{E}_X[-\log_D(p(x))] + 1 \quad \text{since} \quad \lceil -\log_D(p(x))\rceil < -\log_D(p(x)) + 1 \]
+        \[ = H_D[X] + 1. \]
+        We can replace the 1 with \( \frac{1}{n} \) by amortizing the wasted bit spread over \( n \) bits, encoded at once.
+        \item This is known as a Shannon code: assigning short codes to likely events, long codes to unlikely events: \( \ell(x) \approx -\log_D(p(x)) \).
+    \end{itemize}
+    \item Design an optimal code (Huffman) for English words (see data on bcourses).
+    \begin{itemize}
+        \item Let’s start by testing the difference between \( L = \mathbb{E}_X[\ell(x)] \) and \( H_2[X] \), which just means the base 2 entropy.
+        \item This is known as a Huffman code: Save the last bit/question for the least likely events.
+    \end{itemize}
+    \item Challenge: given \( \{X_1, X_2, \ldots\} \), \( X_i \stackrel{\text{iid}}{\sim} \text{Bernoulli}(p, 1-p) \) design a mapping \( f: X \to Y \) (where \( Y=f(X) \)) such that:
+    \begin{itemize}
+        \item \( \{Y_1, Y_2, \ldots\} \), \( Y_j \stackrel{\text{iid}}{\sim} \text{Bernoulli}\left(\frac{1}{2}, \frac{1}{2}\right) \)
+        \item Maximizing efficiency: \( \eta = \frac{\mathbb{E}[\text{number of output bits, } |Y|]}{|X|} \) where \( |X| = \) number of unfair bits
+        \item That works and is optimal for all \( p \in [0, 1] \).
+        \item This is known as a Fano code: maximize expected information gain per question/bit.
+    \end{itemize}
+\end{enumerate}

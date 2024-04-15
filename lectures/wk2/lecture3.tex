@@ -1,0 +1,102 @@
+\section{Tuesday, January 23rd}
+Here is the text converted into valid LaTeX, assuming that the `important` environment and `mdframed` package are already defined in your LaTeX document preamble:
+
+```latex
+\subsection{Shannon Entropy}
+
+We will start with the definition of Shannon Entropy.
+
+We say an uncertainty functional \( U[X] \) satisfying either Shannon or Khinchin's axioms must be a Shannon Entropy, \( U[x]=H_a[X]=- \sum_{\text{all } x \in \mathcal{X}} p(x) \log_a(p(x)) = \mathbb{E}_X[\log_a(1/p(x))] \) where \( a \) is the choice of units.
+
+\subsubsection{Properties of Entropy}
+\begin{itemize}
+  \item It is intrinsic: Entropy will be symmetric under a certain reflection.
+  \item Entropy is bounded below: \( H[X] \geq 0 \) with equality if and only if \( \exists x \) such that \( p(x)=1 \).
+  \item The discrete Entropy is bounded above: \( H[X] \leq \log_a(|X|) \) with equality if and only if \( X \) is distributed uniformly with \( H[X]=\log_a(n)=1 \).
+  \item \( H(p) \) is continuous in \( p \) (also differentiable in \( p \) if we throw out impossible events).
+  \begin{itemize}
+      \item So that our uncertainty doesn’t jump around so that we can have convergence.
+      \item You can think about all of your outcomes as groups of the smallest denominators.
+  \end{itemize}
+  \item \( H(p) \) is a concave function of \( p \).
+  \item Chain Rule: \( H[X, Y] = H[Y] + H[X | Y] = H[X] + H[Y | X] \)
+  \begin{itemize}
+      \item Uncertainty in the joint = Uncertainty in the marginal + Uncertainty in the conditional.
+      \item We only observe \( Y \) first + \( \mathbb{E} \) [uncertainty left over] where the latter term is the definition of conditional entropy.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Other Entropies}
+\begin{itemize}
+\item \textbf{Definition}: Joint Entropy \\
+Given \( X, Y \) with distribution \( p(., .) \), then \\
+\( H[X, Y] = \mathbb{E}_{X, Y}[\log_a(1/p(X, Y))] = -\sum_{\text{all } x, \text{all } y} \log_a(p(x, y)) \).
+
+\item \textbf{Definition}: Conditional Entropy given an observation. \\
+Given \( X, Y \) with distribution \( p(., .) \), then \\
+\( H[X | Y=y] = \mathbb{E}_{X | Y=y}[\log_a(1/p(X | Y=y))] \).
+
+\item \textbf{Definition}: Conditional Entropy \\
+Given \( X, Y \) with distribution \( p(., .) \), then
+\[ H[X | Y] = \mathbb{E}_Y[H[X | Y=y]] = \mathbb{E}_{X | Y}[\log_a(1 / p(X | Y))] \].
+
+\item \textbf{Alternate}:
+\begin{flalign*}
+U[X] = \mathbb{E}_X[1 - p(X)]  \\
+&= 1 - \mathbb{E}_X[p(X)] \text{ by linearity}  \\
+&= 1 - \sum_x p(x) p(x)  \\
+&= 1 - \sum_x p(x)^2  \\
+&= 1 - \Pr(X_1 = X_2)  \\
+&=  \Pr(X_1 \neq X_2)
+\end{flalign*}
+for i.i.d. \( X_1, X_2 \sim p \).
+\end{itemize}
+
+Now we will consider what will happen if we relax the chain rule:
+\[ X \text{ independent of } Y \implies H[X | Y] = H[X] \]
+\[ \implies H[Y | X] = H[Y] \]
+\[ \implies H[X, Y] = H[X] + H[Y] \]
+We will call the three equations above (*).
+
+\textbf{Fact we will prove in the future}:
+\[ H[X] = \text{Var}(X) \text{ for } X \sim \mathcal{N}(\mu, \sigma) \]
+
+\textbf{Theorem}: If we replace the chain rule with equation (*) in Khinchin’s axioms, then
+\[ U[X] = H_a^{(\alpha)}[X] \]
+Where:
+\[ H_a^{(\alpha)}[X] = \frac{1}{1 - \alpha} \log_a \left(\sum_x p(x)^\alpha \right) = \frac{\alpha}{1 - \alpha} \log_a \left( ||[p_1, \ldots, p_{|X|}]||_\alpha \right) \]
+is known as Rényi Entropy.
+
+If we take \( \alpha \to 0 \) then we get Hartley Entropy: \( H_a^{(0)}[X] = \log_a(|X|) \).
+
+If we take \( \alpha \to 1 \) then we get Shannon Entropy.
+
+If we take \( \alpha \to 2 \) then we get the Coincidence/Collision Entropy: \( H_a^{(2)}[X] = \log_a \left( \frac{1}{\sum_x p(x)^2} \right) = \log_a \left( \frac{1}{\Pr(X_1 = X_2)} \right) \).
+
+If we take \( \alpha \to n \geq 1 \) then we get:
+\[ H_a^{(n)}[X] = \frac{1}{n - 1} \log_a \left( \frac{1}{\Pr(X_1 = X_2 = \ldots = X_n)} \right) \].
+
+If we take \( \alpha \to \infty \) then we get:
+\[ H_a^{(\infty)}[X] = \log_a \left( \frac{1}{\max_{x \in X} p(x)} \right) \].
+
+\subsubsection{Information}
+
+\textbf{Information}: The reduction of uncertainty after an observation. The mutual information between \( X \) and \( Y \) is defined as
+\[ I(X; Y) = \mathbb{E}_Y[H[X] - H[X | Y=y]] = H[X] - \mathbb{E}_Y[H[X | Y=y]] = H[X] - H[X | Y] \]
+I am asking about \( X \) when I am observing \( Y \).
+
+The information \( Y \) carries about \( X \) is the uncertainty in \( X \) before observation minus the expected uncertainty in \( X \) after observation.
+
+\subsubsection{Properties of Information}
+\begin{enumerate}
+    \item Self-Information:
+    \begin{itemize}
+        \item \textbf{Lemma}: \( I(X; X) = H[X] \). This follows from the definition of information with the fact that \( H[X | X=x] = 0 \) which implies \( H[X | X] = 0 \) since there is zero expected surprise after observing itself.
+        \item If we identify an outcome then we’ve learned everything there is to know about it. The amount of information equals the original uncertainty.
+    \end{itemize}
+    \item Independent: \( I(X; Y) = \) prior - posterior \( = H[X] - H[X | Y] = H[X] - H[X] = 0 \).
+    \item \( I(X; Y) = I(Y; X) \), the information X carries about Y is the same as the information Y carries about X.
+    \begin{itemize}
+        \item Proof: \( I(X; Y) = H[X] - H[X | Y] = H[X] - (H[X, Y] - H[Y]) = H[X] + H[Y] - H[X, Y] = I(Y; X) \).
+    \end{itemize}
+\end{enumerate}

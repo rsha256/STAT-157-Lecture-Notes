@@ -1,0 +1,72 @@
+\section{Thursday, January 25th}
+\section*{Information Theory}
+
+Last time we defined information:
+\begin{equation*}
+I(X; Y=y) = H[X] - H[X | Y=y]
+\end{equation*}
+and mutual information as the expected information before making the observation:
+\begin{equation*}
+I(X; Y) = \mathbb{E}_y[I(X; Y=y)].
+\end{equation*}
+We called this mutual information because of the third property covered last lecture.
+
+\subsection{Relative Entropy}
+Relative Entropy, also known as KL Divergence, is defined as:
+\begin{equation*}
+D(p || q) = \mathbb{E}_{x \sim p}[\log(p(x)/q(x))].
+\end{equation*}
+
+\subsection{Mutual Information is a KL Divergence}
+\begin{equation*}
+I(X; Y) = I(Y; X) = D(p_{X, Y} || p_X p_Y) = \mathbb{E}_{X, Y}[\log(p(X, Y)/(p(X)p(Y)))].
+\end{equation*}
+Here, \( p_X p_Y \) is the product distribution where \( p(X=x) p(Y=y) \).
+
+\subsection{Convex Functions}
+A function is convex if it lies beneath any chord of the function. For a convex combination (meaning \( p_1 + p_2 = 1 \)) \([p_1, p_2] \in \Delta_2\) which is the simplex in 2 dimensions, we have:
+\begin{equation*}
+p_1 f(x_1) + p_2 f(x_2) \geq f(p_1 x_1 + p_2 x_2).
+\end{equation*}
+And the expected value of \( f(X) \) is:
+\begin{equation*}
+\mathbb{E}_{X \sim [x_1, x_2] \text{ with probability } [p_1, p_2]}[f(X)] \geq f(\mathbb{E}[X]).
+\end{equation*}
+We have strict convexity if we have a strict inequality.
+
+\subsection{Jensen's Inequality}
+Generalizing to any dimension, we get Jensen's inequality:
+If \( f \) is convex, for any distribution \( p \),
+\begin{equation*}
+\mathbb{E}_{X \sim p}[f(X)] \geq f(\mathbb{E}_{X \sim p}[X]).
+\end{equation*}
+
+\subsubsection{Proof via Induction}
+\begin{Answer}
+We can prove Jensen's inequality via induction:
+\begin{itemize}
+    \item Base Case: \( n=2 \), see above.
+    \item Inductive Step: Assume Jensen's holds for \( n=k \).
+    \item Inductive Conclusion: Show that Jensen's for \( n=k \) implies Jensen's for \( n=k+1 \).
+    \begin{align*}
+    \mathbb{E}_{X \sim p \text{ which is } k+1 \text{ outcomes}}[f(X)] &= \sum_{j=1}^{k+1} p_j f(x_j) \\
+    &= \sum_{j=1}^{k} p_j f(x_j) + p_{k+1} f(x_{k+1}) \\
+    &= \left(\sum_{m=1}^{k} p_m\right) \sum_{j=1}^{k} \left[\frac{p_j}{\sum_{m=1}^{k} p_m} f(x_j)\right] + p_{k+1} f(x_{k+1}) \\
+    &\geq (1 - p_{k+1}) f\left(\mathbb{E}_{X \neq X_{k+1}}[X]\right) + p_{k+1} f(x_{k+1}) \\
+    &= f\left(\sum_{j=1}^{k+1} p_j x_j\right) = f(\mathbb{E}[X]). \text{ QED.}
+    \end{align*}
+\end{itemize}
+\end{Answer}
+
+\subsection{Information Inequality}
+The information inequality states that \( I(X; Y) \geq 0 \). The proof is as follows:
+\begin{align*}
+I(X; Y) &= D(p_{X, Y} || p_X p_Y) \\
+&= \mathbb{E}_{X \sim p}[\log(p(x)/q(x))] \\
+&= \mathbb{E}_{X \sim p}[-\log(q(x)/p(x))] \\
+&= \mathbb{E}_{Y}[-\log(Y)] \quad \text{where} \quad Y(X)=\frac{q(x)}{p(x)} \text{ is convex, so by Jensen's Inequality,} \\
+&\geq -\log(\mathbb{E}_{X \sim p}[q(x)/p(x)]) \\
+&= -\log(\sum_x p(x) \cdot \frac{q(x)}{p(x)}) \\
+&= -\log(\sum_x q(x)) \\
+&= -\log(1) = 0. \quad \text{QED.}
+\end{align*}

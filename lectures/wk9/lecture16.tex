@@ -1,0 +1,190 @@
+\section{Tuesday, March 12th}
+\subsection{Logistics}
+\begin{itemize}
+    \item Project Part 3 due today -- Part 4 will be out this week
+    \begin{itemize}
+        \item Note you only have finitely many slip days.
+    \end{itemize}
+    \item Discussion due Thursday
+    \item Quiz 4 retake Thurs (9:30am, 1:30pm)
+    \item Quiz 5 (on chapter 11) on Thursday
+    \begin{itemize}
+        \item Note this plays a similar role as Chapter 5 on Entropy, but on Information: Interpreting info in more applied settings. Thus this will be mainly a quiz on statements/theorems.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Activity Groups:}
+We will examine the following 3 so we can determine proper use cases between them. The distinguishability (expectation of the test statistic) of two distributions is its KL Divergence.
+
+\begin{shaded}
+    $D(p \| q)$ is \underline{how distinguishable $p$ is from $q$}, where distinguishabililty is how much samples you need asymptotically, s.t. you can separate them (tell which came from which distribution) w.h.p.. 
+\end{shaded}
+
+\begin{shaded}
+    $I[X; Y]$ is \underline{$D(p_{X, Y}\| p_{X} p_{Y})$}, how distinguishable the true joint is from the product (thus they are a measure of dependence). Note that this even holds for non-linear dependence.
+\end{shaded}
+
+Example:
+\begin{shaded}
+    $H(p)$ is \underline{the compression of a r.v.}.
+\end{shaded}
+
+\newpage
+\subsubsection{LLN (Thm 11.2.1)}
+\begin{shaded}
+Theorem 11.2.1 Let $X_1, X_2, \ldots, X_n$ be i.i.d. $\sim P(x)$. Then
+$$
+\operatorname{Pr}\left\{D\left(P_{x^n}|| P\right)>\epsilon\right\} \leq 2^{-n\left(\epsilon-|\mathcal{X}| \frac{\log (n+1)}{n}\right)},
+$$
+and consequently, $D\left(P_{x^n} \| P\right) \rightarrow 0$ with probability 1.
+\end{shaded}
+
+\begin{Answer}
+\textbf{Proof:} The inequality (11.69) was proved in (11.68). Summing over $n$, we find that
+$$
+\sum_{n=1}^{\infty} \operatorname{Pr}\left\{D\left(P_{x^n} \| P\right)>\epsilon\right\}<\infty
+$$
+Thus, the expected number of occurrences of the event $\left\{D\left(P_{x^n} \| P\right)>\epsilon\right\}$ for all $n$ is finite, which implies that the actual number of such occurrences is also finite with probability 1 (Borel-Cantelli lemma). Hence $D\left(P_{x^n} \| P\right) \rightarrow 0$ with probability 1.
+$\hfill\square$
+\end{Answer}
+
+The Empirical Distribution converges i.p. to the true distribution as $n\to\infty$.
+
+The prob. of observing an Empirical Distribution that is far away from the true distribution is vanishing (so we converge i.p.).
+
+Thus w.h.p., $D(p\|q)<\varepsilon$.
+
+Look for $\mathcal{E}(n)\stackrel\to{n\to\infty}0$ s.t. $\P[D(P_{x^n} \| P_0) < \mathcal{E}(n)] \to 1$.
+
+This leads to the fact that we can do estimation with data.
+
+\newpage
+\subsubsection{Sanov \& Conditional Limit (Thm 11.4.1, 11.6.2)}
+\begin{shaded}
+Theorem 11.4.1 (Sanov's theorem) Let $X_1, X_2, \ldots, X_n$ be i.i.d. $\sim Q(x)$. Let $E \subseteq \mathcal{P}$ be a set of probability distributions. Then
+$$
+Q^n(E)=Q^n\left(E \cap \mathcal{P}_n\right) \leq(n+1)^{|\mathcal{X}|} 2^{-n D\left(P^*|| Q\right)},
+$$
+where
+$$
+P^*=\arg \min _{P \in E} D(P \| Q)
+$$
+is the distribution in $E$ that is closest to $Q$ in relative entropy.
+If, in addition, the set $E$ is the closure of its interior, then
+$$
+\frac{1}{n} \log Q^n(E) \rightarrow-D\left(P^* \| Q\right) .
+$$
+\end{shaded}
+
+\begin{Answer}
+\textbf{Proof:} We first prove the upper bound:
+\begin{align*}
+Q^n(E) & =\sum_{P \in E \cap \mathcal{P}_n} Q^n(T(P)) \\
+& \leq \sum_{P \in E \cap \mathcal{P}_n} 2^{-n D(P \| Q)}
+\\
+& \leq \sum_{P \in E \cap \mathcal{P}_n} \max _{P \in E \cap \mathcal{P}_n} 2^{-n D(P \| Q)} \\
+& =\sum_{P \in E \cap \mathcal{P}_n} 2^{-n \min _{P \in E \cap \mathcal{P}_n} D(P \| Q)} \\
+& \leq \sum_{P \in E \cap \mathcal{P}_n} 2^{-n \min _{P \in E} D(P \| Q)} \\
+& =\sum_{P \in E \cap \mathcal{P}_n} 2^{-n D\left(P^* \| Q\right)} \\
+& \leq(n+1)^{|\mathcal{X}|_2} 2^{-n D\left(P^* \| Q\right)},
+\end{align*}
+
+where the last inequality follows from Theorem 11.1.1. Note that $P^*$ need not be a member of $\mathcal{P}_n$. We now come to the lower bound, for which we need a "nice" set $E$, so that for all large $n$, we can find a distribution in $E \cap \mathcal{P}_n$ that is close to $P^*$. If we now assume that $E$ is the closure of its interior (thus, the interior must be nonempty), then since $\cup_n \mathcal{P}_n$ is dense in the set of all distributions, it follows that $E \cap \mathcal{P}_n$ is nonempty for all $n \geq n_0$ for some $n_0$. We can then find a sequence of distributions $P_n$ such that $P_n \in E \cap \mathcal{P}_n$ and $D\left(P_n \| Q\right) \rightarrow D\left(P^* \| Q\right)$. For each $n \geq n_0$,
+$$
+\begin{aligned}
+Q^n(E) & =\sum_{P \in E \cap \mathcal{P}_n} Q^n(T(P)) \\
+& \geq Q^n\left(T\left(P_n\right)\right) \\
+& \geq \frac{1}{(n+1)^{|\mathcal{X}|}} 2^{-n D\left(P_n \| Q\right)} .
+\end{aligned}
+$$
+
+Consequently,
+$$
+\begin{aligned}
+& \liminf \frac{1}{n} \log Q^n(E) \geq \liminf \left(-\frac{|\mathcal{X}| \log (n+1)}{n}-D\left(P_n|| Q\right)\right) \\
+& \quad=-D\left(P^*|| Q\right) .
+\end{aligned}
+$$
+
+Combining this with the upper bound establishes the theorem.
+$\hfill\square$
+\end{Answer}
+This argument can be extended to continuous distributions using quantization.
+
+Sanov: Limits \& bounds on P[a (sort of) extreme event] that converges to 0 (as $n\to\infty$), exponentially with $d^{-n\cdot D(p_\ast\| p_0)}$ (in $n$ w/ role $D(p_\ast\| p_0)$).
+
+Conditional: Conditioned on $P_{x^n} \in E$. 
+$$
+P_{x^n} \ip p_\ast
+$$
+
+\newpage
+\subsubsection{Hypothesis Testing (Chernoff-Stein Thm 11.8.3)}
+\begin{shaded}
+Theorem 11.8.3 (Chernoff-Stein Lemma) Let $X_1, X_2, \ldots, X_n$ be i.i.d. $\sim Q$. Consider the hypothesis test between two alternatives, $Q=P_1$ and $Q=P_2$, where $D\left(P_1 \| P_2\right)<\infty$. Let $A_n \subseteq \mathcal{X}^n$ be an acceptance region for hypothesis $H_1$. Let the probabilities of error be
+$$
+\alpha_n=P_1^n\left(A_n^c\right), \quad \beta_n=P_2^n\left(A_n\right) .
+$$
+and for $0<\epsilon<\frac{1}{2}$, define
+$$
+\beta_n^\epsilon=\min _{\substack{A_n \subseteq \mathcal{X}^n \\ \alpha_n<\epsilon}} \beta_n.
+$$
+Then
+$$
+\lim _{n \rightarrow \infty} \frac{1}{n} \log \beta_n^\epsilon=-D\left(P_1 \| P_2\right) .
+$$
+\end{shaded}
+
+
+Inuitively, if we allow $\alpha$ to be fixed, then $P_\lambda^*=P_0$ (exponent does not decay) and hence $\beta \approx 2^{-n D\left(P_0 \| P_1\right)}$, i.e. we can achieve a faster error exponent on one type of error probability if we allow the other type of error probability to be fixed or decay arbitrarily slowly. For a rigorous proof, see below:
+\begin{Answer}
+\textbf{Proof:} We prove this theorem in two parts. In the first part we exhibit a sequence of sets $A_n$ for which the probability of error $\beta_n$ goes exponentially to zero as $D\left(P_1 \| P_2\right)$. In the second part we show that no other sequence of sets can have a lower exponent in the probability of error.
+
+For the first part, we choose as the sets $A_n=A_\epsilon^{(n)}\left(P_1 \| P_2\right)$. As proved in Theorem 11.8.2, this sequence of sets has $P_1\left(A_n^c\right)<\epsilon$ for $n$ large enough. Also,
+$$
+\lim _{n \rightarrow \infty} \frac{1}{n} \log P_2\left(A_n\right) \leq-\left(D\left(P_1 \| P_2\right)-\epsilon\right)
+$$
+from property 3 of Theorem 11.8.2. Thus, the relative entropy typical set satisfies the bounds of the lemma.
+
+To show that no other sequence of sets can to better, consider any sequence of sets $B_n$ with $P_1\left(B_n\right)>1-\epsilon$. By Lemma 11.8.1, we have $P_2\left(B_n\right)>(1-2 \epsilon) 2^{-n\left(D\left(P_1 \| P_2\right)+\epsilon\right)}$, and therefore
+$$
+\begin{aligned}
+& \lim _{n \rightarrow \infty} \frac{1}{n} \log P_2\left(B_n\right)>-\left(D\left(P_1 \| P_2\right)+\epsilon\right)+\lim _{n \rightarrow \infty} \frac{1}{n} \log (1-2 \epsilon) \\
+& \quad=-\left(D\left(P_1 \| P_2\right)+\epsilon\right) .
+\end{aligned}
+$$
+
+Thus, no other sequence of sets has a probability of error exponent better than $D\left(P_1 \| P_2\right)$. Thus, the set sequence $A_n=A_\epsilon^{(n)}\left(P_1 \| P_2\right)$ is asymptotically optimal in terms of the exponent in the probability.
+$\hfill\square$
+\end{Answer}
+
+Less formally, that is:
+
+We are drawing ${X_i}_{i=1}^n\simiid p$, where $p=p_1$ or $p=p_2$.
+
+We have two probabilities of errors that we need to control for. 
+
+$\alpha_n = $ FNR = False Rejection. We control this by forcing it to be less than $\varepsilon\in[0, \frac12]$ with the exact value acting as a bound on an error rate guarantee.
+
+$\beta_n = $ FPR = False Acception. 
+
+$\beta_n^\varepsilon = $ Best you can do for one error, as you control for the other error ($\alpha_n < \varepsilon$).
+
+then: the $\min(\text{FP})$ w/ which we can distinguish $p_1$ and $p_2$ is exponential in $n$: proportional to $d^{-n D(p_2 \| p_1)}$ for the best possible test.
+
+As we make $n$ bigger, we see that it grows roughly exponential in the number of samples: $e^{n D(P(P_1 \| P_2))}$.
+
+If this decays to 0 quickly, then you only need a few samples.
+
+If this decays to 0 slowly, then you will need a lot of samples.
+
+This is measured via the Divergence of the distributions.
+
+\begin{shaded}
+This rate of convergence, the further apart distributions are, the easier it should be to tell they are different.
+\end{shaded}
+
+This is done as a fn. of how much data I collect.
+
+
+

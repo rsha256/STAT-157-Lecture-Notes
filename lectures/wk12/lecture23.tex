@@ -1,0 +1,135 @@
+\section{Thursday, April 11th}
+\subsection{Logistics}
+\begin{itemize}
+    \item Reading Posted
+    \item Project Part 5 due Today
+    \item Discussion due Today
+    % \item Quiz 7 Today
+\end{itemize}
+
+\subsection{Boltzmann}
+This is widely used in Physics:
+\begin{equation}
+p_s(x) \propto e^{-u(x)} \propto e^{-\frac1{K_B T} E(x)}
+% \implies \frac{p_{s_i}}{p_{s_j}} = \frac{r_{ij}}{r_{ji}}=e^{-(u_j-u_i)}.
+\end{equation}
+for some potential function (with an additive normalization constant) $u(x)$ and where $T$ is temperature.
+
+The internal energy of the system is related to the potential function $u(x)$.
+
+\subsection{Equipartition}
+At thermal equilibrium (this applies when the system is closed), all states with equal probabilities are equally likely.
+
+If $x, y\st u(x)=u(x')\implies p_s(x)=p_s(x')$.
+
+\subsection{Relationship to Work}
+$W_{ij} \propto -\ln(\frac{r_{ij}}{r_{ji}})$.
+
+We have a negative since we want low energy states to be prioritized.
+
+\subsection{Mixing}
+\begin{align}
+    D(p(t)\| q_{s}) &\searrow
+\end{align}
+$D(p(t)\| q_{s})$ is mon. non-incr., converges to 0 as $t\to\infty$.
+
+\begin{align*}
+D(p(t)\| q_{s}) 
+&= \E_{X\sim p(t)}\left[\ln\left(\frac{p(X, t)}{p_s(X)}\right)\right]
+ \\   
+&= 
+\E_{X\sim p(t)}\left[\ln\left({p(X, t)}\right)\right]
+- 
+\E_{X\sim p(t)}\left[\ln\left({p_s(X)}\right)\right]
+ \\   
+&= 
+\E_{X\sim p(t)}\left[\ln\left({p(X, t)}\right)\right]
++ 
+\E_{X\sim p(t)}\left[u(x)\right]
+ \\   
+&= 
+-H[X(t)]
++ 
+\frac1{K_B T} \E_{X\sim p(t)}\left[E(X)\right]
+ \\   
+&= 
+\frac1{K_B T}
+\Big(
+    -\E_{x\sim p(t)}[E(X)]
+    - 
+    K_B T \cdot H[X(t)]
+\Big)
+\\
+&= \text{ Free Energy}
+\\
+&= F[X]-F(p)
+\end{align*}
+
+\subsubsection{Interpretation}
+\begin{equation}
+    F = E - H
+\end{equation}
+\begin{enumerate}
+    \item We can either have $E\searrow$. We heat the reservoir (cooling the system). The system tends to release energy (as heat) which is an exothermic reaction.
+    \item We can also have $H\nearrow$. We absorb the hear which cools the reservoir -- which is an endothermic reaction.
+\end{enumerate}
+
+Entropy of a closed system $H[X(t)]\nearrow$. Thus the energy is constant no matter how you arrange the system meaning that it is impossible for the expected energy of the system to change at time $t$.
+
+Thus $E(x)=E(x')\quad\forall x,x'$ means it is impossible for $\E[E[X(t)]]=E$.
+
+This means if $F=E-H, F\searrow, H\nearrow$.
+
+\subsubsection{Corollary: 2nd law of thermodynamics}
+If the system is energetically closed, then $H[X(t)]\nearrow$.
+
+Mathematically, if $\E_p[E(x)]=\E_{x\sim q}[E(x)]\implies E(x)=E(x')\implies u(x)=u(x')$\\
+$\implies p_s(x)=p_s(x')\implies p_s$ is uniform.
+
+$p_s$ is uniform means that $\ln(\frac{r_{ij}}{r_{ji}})=\underbrace{-(u(i)-u(j))}_{0}\implies r_{ij}=r_{ji}$.
+
+Thus, \textbf{Free Energy is decreasing}.
+
+\subsection{Applying Method of Types}
+We can use the Method of Types to make it so that sample averages over the collection converge w.h.p. to $\E_X[q(X)]$.
+
+\subsection{Coarse-graining a Macro state}
+Given a reservoir which is the set of all possible temperature averages $Y=y(X)$, we can be fixed in one set of arrangements.
+
+\begin{align*}
+    &\{x\st y(x)=y\}
+\end{align*}
+
+\subsubsection{A thermal notion of Entropy}
+Given $Y(t)\implies$ condtl. distro. on $X\mid Y$.
+
+This allows us to take statements that only hold i.d. and apply them to individual trajectories.
+
+\subsection{From a distribution argument to a trajectory argument}
+Defn.: $y(X)$ indicates some macroscopic property of the microscopic state.
+
+\begin{shaded}
+Example: Temperature may be defined as the average of the Kinetic Energy of particles in the system.
+\end{shaded}
+
+We define this $\st y(x)=y(x')\implies E(x)=E(x')$.
+
+$X(t)$ evolving in time $\implies Y(t)=y(X(t))$ given that $Y(t)=y\implies$ dist. $X|Y=y$ which is $\approx$Uniform over $\{x: \ y(x)=y\}$.
+
+At steady state, $x\sim p_s$, what is: \\
+$\Pr(Y=y)=\sum_{x\st y(x)=y}\Pr(X=x)=(\# x \st y(x)=y)e^{-\frac1{K_B T} E(x)}$.
+
+But we note that this is the same as:\\
+$=\underbrace{(\# x \st y(x)=y)}_{\text{multiplicity}}\underbrace{e^{-\frac1{K_B T} E(y)}}_{\stackrel{\text{Energetic}}{\text{state}} = \text{likelihood}}$
+\\
+$=e^{-\frac1{K_B T} \left(E(y) - K_B T \underbrace{\log((\# x \st y(x)=y))}_{H[X\mid Y=y]}\right)}$
+
+where $H[X\mid Y=y]=$ thermodynamic entropy: $S(y)=\ln(\# \text{ microstates w/ microstate } y)$.
+
+\begin{important}
+    Challenge Questions:
+    \begin{enumerate}
+        \item Does this imply $S(Y(t))\nearrow$ w.h.p. if the system is closed?
+        \item Generalize this if the energy of the microstate is not uniquely specified by the macroscopic state. You can then rediscover the axioms that we used to define entropy w/ chain rule!
+    \end{enumerate}
+\end{important}

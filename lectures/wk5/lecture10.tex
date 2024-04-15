@@ -1,0 +1,43 @@
+\section{Thursday, February 15th}
+\subsection{Entropy in Different Contexts}
+
+Given \( X \sim f_x \) then \( h[X] = f(f_x) \).
+
+\subsubsection{Discrete vs. Continuous}
+
+\begin{itemize}
+    \item Discrete: distribution \( p \) (list of probabilities).
+    \item Continuous: density \( f_x \).
+\end{itemize}
+
+In the latter case, it is not enumerable. To address this, we note that both are defined as a measure, and we will explore how to define a 'better' measure.
+
+\subsubsection{Measures and Calculus}
+
+Measures are functions which map sets to probabilities. These sets, subsets of \( \Omega \), are called "events". For calculus, we will require a differential \( dx \) which is extrinsic here since \( x \) is extrinsic.
+
+\subsubsection{Entropy Definitions}
+
+\begin{itemize}
+    \item Discrete: \( H[X] = H(p) = -\mathbb{E}_X[\log(p)] = -\sum_{x \in \mathcal{X}} p(x) \log(p(x)) \). This is intrinsic.
+    \item Differential: \( h[X] = h(f_x) = -\mathbb{E}_X[\log(f_X(x))] = -\int_{x \in \mathcal{X}} f_X(x) \log(f_X(x)) \, dx \). This is extrinsic.
+\end{itemize}
+
+\begin{itemize}
+    \item We would need an infinite number of questions to get the answer here.
+    \item We can approach the problem by playing the game of 20 Questions to get within a sufficient region of the answer, which we define as precision.
+    \item Starting with a wider interval means more questions are needed.
+\end{itemize}
+
+The main difference between the two is that after a monotone transformation \( T \), they will be intrinsic and extrinsic respectively.
+
+\subsubsection{Density and Precision}
+
+\[ \text{density}(x) = \frac{\text{Prob. that } X \text{ near to } x}{\delta x} = \frac{\text{Prob.}}{\text{unit length}} \, \text{per.} \]
+
+Note: \( \Delta x(y) \) denotes the differential in \( x \), for the bin that contains \( y \).
+
+\subsection{Quiz Time!}
+
+\emph{This section is left intentionally blank for the quiz content.}
+

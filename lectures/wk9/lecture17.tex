@@ -1,0 +1,152 @@
+\section{Thursday, March 14th: Practical Problems in Information Geometry}
+\subsection{Logistics}
+\begin{enumerate}
+    \item Peer Review Assigned (due next Thurs.)
+    \item Discussion Due Today
+    \item Quiz 5 Today
+\end{enumerate}
+
+\subsection{Common Questions}
+\begin{enumerate}
+    \item Choice of variational class
+    \item Choice/Interpretation of Loss
+    \item Estimating (from data)
+    \begin{itemize}
+        \item The loss ($D, I, H\implies$ \underline{need density})
+        \item \underline{$\nabla_p$ of the loss}
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Canonical Questions}
+\begin{enumerate}
+    \item Fix $\cX$
+    \item Fix target $P_0$
+    \item Choose variational family $\cP$
+    \item \underline{Choose loss}: $D(\cdot\| p_0)$ or $D(p_0\|\cdot)$, which we note is cvx.
+\end{enumerate}
+Find \begin{equation}
+    p_\ast = \argmin_{p\in\cP} 
+    \left\{\text{loss}(p, p_0)\right\}
+\end{equation}
+You can still run into issues if the class you are restricting to (on the 3D simplex) is not a convex class.
+
+
+\subsection{Variational Bayes}
+Usually in a Bayesian setting, you want some function (i.e. mode, or even a credible interval),
+$$
+p_0 = \text{posterior distribution}
+$$
+
+If we don't have a conjugate prior, we often ignore the normalization factor (the denominator) when we take the product of the likelihood and the prior. Note: we could find it if we \textit{really} wanted to, but integration in high dimensions is hard.
+
+So we only know $p_0$ up to a normalization factor.
+
+This means we know $\log(p_0)+C$ up to an unknown additive factor, $C$.
+
+We can sample from this, but as everyone in the class already knows, sampling is very difficult. So in Variational Bayes, you often find a tractable family:
+\begin{equation}
+    \cP = \{\text{set of ``tractable'' distributions, sufficiently expressive}\}
+    \implies X^{(n)} = \{X_1\}_{i=1}^n\simiid p\quad\text{ if } p\in\cP
+\end{equation}
+
+Our loss is $D(p\| p_0)$, restricting $p\in\cP$. We minimize this loss over all $p\in\cP$.
+
+\subsubsection{Mean-Field Approximation}
+This is implicitly given from Variational Bayes as it simply a form of Block Independence (between entries of $X\in\cX$ where $X=[X_1,X_2,\ldots,X_n]$ is a vector and $\cX$ the space of possible outcomes).
+
+In here, we get explicit parametric forms for the solution $p_\ast \propto \exp(\sum_{i=1}^n \lambda_i g_i(x))$ which we optimize with the Expectation-Maximization algorithm.
+
+\subsubsection{Gaussian Mixture Model}
+\begin{equation}
+    \cP = \{P_\theta\}_\Theta
+\end{equation}
+
+\subsection{Generative Models}
+\begin{enumerate}
+    \item Know $\{X_1\}_{i=1}^n\simiid p_0$, for unknown $p_0$, $P_{x^{(n)}} \approx p_0$
+    \item $\cP=\{p_\theta\}_\Theta$, which we can optimize over with a NN
+    \item \underline{Loss}: $D(P_{x^{(n)}}\|p_\theta)$, $p\in\cP=\{p_\theta\}_\Theta$
+    \begin{itemize}
+        \item average over $\{X_i\}_{i=1}^n$
+    \end{itemize}
+\vspace{0.4em}
+This is equivalent to MLE due to the method of types (we optimize over $\Theta$).
+\end{enumerate}
+
+\subsubsection{Proof of Generative Models having strong duality with MLE}
+$
+\cL(\theta; X^{(n)}) = d^{-n(H(P_{\xn}) + D(P_{\xn} \| P_\theta))}
+$
+is equivalent to: 
+$
+d^{-n(D(P_{\xn} \| P_\theta))}
+$
+
+which is equivalent to: 
+$
+\min n(D(P_{\xn} \| P_\theta))
+$
+
+\subsubsection{Large Language Models}
+In LLMs, we formulate this as minimizing ``Perplexity'' or ``Cross-Entropy'' 
+which is equivalent to: 
+\begin{align*}
+\min (D(P_{\xn} \| P_\theta)) 
+&\equiv \min \E_{Y\sim P_\xn}\left[
+\log\left(
+\frac{P_\xn(Y)}{p_\theta(Y)}
+\right)
+\right]
+\\
+&\sim -\E_{Y\sim P_\xn}\left[
+\log\left(
+{p_\theta(Y)}
+\right)
+\right]
+\end{align*}
+
+where ${P_\xn(Y)}=\begin{cases}
+    0 \quad\text{ if } X_i\neq y\\
+    \frac1n \quad\text{ o/w}
+\end{cases}$
+
+If you get your distribution wrong, you will be more surprised than if you were correct about the distribution it came from: $H[p, q]\geq H[p]$. We can also see this by looking at the difference.
+\subsubsection{Proof via revisiting previous lectures (incorporate KL Divergence)}
+\begin{align*}
+    H(p, q) - H(p) 
+    &= \E_{X\sim p}[-\log(q(X)) + \log(p(X))]
+    \\
+    &= \E_{X\sim p}[-\log(\frac{p(X)}{q(X)})]
+    \\
+    &= D(p\| q)
+    \\
+    &\geq0 &&[\text{Since divergences are non-negative}]
+\end{align*}
+Thus we get that 
+$    H(p, q) - H(p) 
+\geq 0 \implies
+    H(p, q) \geq H(p) 
+$
+\subsubsection{Relating back to Perplexity}
+We want to $\min D(p\|q)$ w.r.t. $q: D(p\| q)=\underbrace{H(p, q)}_{\min H(p, q)\implies}-H(q)$
+\begin{align*}
+\implies \text{Perplexity of $p_\theta, \Xn$} 
+    &= d^{-H(p_\xn, p_\theta)} 
+    \\
+    &= d^{-\frac1n \sum_{i=1}^n \log(p_\theta (x_j))}
+\end{align*}
+
+Most Generative models give non-zero probability to any possible next word. However this leads to extremely limited support. Since we are restricted to samples makes it so that we don't run into issues with the non-symmetric aspect of the KL divergence $D(p_\theta\|P_\xn)=\infty$.
+
+\subsection{Privacy/Fairness/Data Augmentation}
+True joint dist. $p_0$,
+\begin{align*}
+    (\underbrace{X}_{\text{data observe}}, \underbrace{Y}_{infer}, \underbrace{Z}_{protect}) \sim p_0
+\end{align*}
+Look for data-processing: $T(X)\to X^\prime$ given $T\to p^\prime\sim (X^\prime, Y, Z)$.
+
+Goal: choose $T$ to:
+\begin{enumerate}
+    \item $\displaystyle\max_T\  \{I[X^\prime; Y]\}$
+    \item $\displaystyle\min_T\  \{I[X^\prime; Z]\}$
+\end{enumerate}

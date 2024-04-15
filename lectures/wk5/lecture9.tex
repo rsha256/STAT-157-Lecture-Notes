@@ -1,0 +1,83 @@
+\section{Tuesday, February 13th}
+\subsection{Goals/Main Question: Is Differential Entropy still intrinsic?}
+\begin{itemize}
+    \item Is Differential Entropy extrinsic?
+    \item Defn.:
+\end{itemize}
+\begin{defn}{Differential Entropy}
+Given \( X \sim f_X \), then \( h[X] = h(f_X) \).
+\end{defn}
+
+\subsubsection{Side-by-Side comparison: Discrete vs Differential Entropy}
+\begin{description}
+    \item[Discrete:] 
+    \begin{align*}
+    H[X] = H(p) &= -\mathbb{E}_X[\log(p(X))] &&\text{ where } X \sim p \\
+        &= -\sum_{x \in \mathcal{X}} p(x)\log(p(x))
+    \end{align*}
+    which we see is intrinsic.
+    
+    \item[Differential:] 
+    \begin{align*}
+    H[X] = h(f_X) &= -\mathbb{E}[\log(p(X))] &&\text{ where } X \sim f_X \\
+        &= -\displaystyle\int_{x \in \cX} f_X(x) \log(f_X(x)) \, \d x
+    \end{align*}
+    which we see is extrinsic.
+\end{description}
+
+\subsubsection{Example with Differential Entropy}
+\begin{description}
+    \item[Example:] \( X \sim f_X \), \( X \in \cX \subseteq \mathbb{R} \)
+    \begin{itemize}
+        \item Let \( Y = aX \), then \( f_Y(y) = f_X\left(\frac ya\right) \cdot |a| \)
+        \item Then 
+        \begin{align*}
+        h[aX] &= h[Y] \\
+              &= \mathbb{E}_Y[\log(f_Y(Y))] \\
+              &= \mathbb{E}_X[\log(f_X(X/a) |a|)] \\
+              &= \mathbb{E}_X[\log(f_X(X)) + \log(|a|)] \\
+              &= h[X] + \log(|a|)
+        \end{align*}
+    \end{itemize}
+\end{description}
+
+\hrulefill
+
+\subsection{Axiomatic Approach}
+
+\begin{itemize}
+    \item \underline{Assume}: \( X \) is continuous and \( f_X \) is continuous on $\cX$.
+    \item Definition: \( X^{(n)} \xrightarrow{n \to \infty} X \) i.i.d. if the density \( f_{X^{(n)}} \to f_X \), pointwise almost everywhere (a.e.).
+\begin{defn}{``Weak convergence''}
+  \( \mathbb{E}[g(X^{(n)})] \to \mathbb{E}[g(X)] \) as \( n \to \infty \).  
+\end{defn}
+\end{itemize}
+
+\subsubsection{Axioms}
+\begin{enumerate}
+    \item[(i)] Axiom 1: We want \( h \) to be continuous; we want \( h[X^{(n)}] \to h[X] \), if \( X^{(n)} \to X \) in distribution.
+\begin{shaded}
+Defn.:
+\begin{itemize}
+\item \(Z^{\Delta X}\) be drawn.
+\begin{enumerate}
+    \item Draw $Y^{\Delta X}$
+    \item Draw $Z^{\Delta X}\mid Y^{\Delta X}=k$, uniformly from the \(k^{th}\) bin.
+\end{enumerate}
+\item Then \( Z^{\Delta X} \id X \) as \( {\Delta X} \to 0 \).
+\end{itemize}
+\end{shaded}
+
+    \item[(ii)] Axiom 2 (Uniform/Scale): \( h[\text{Uniform on } X] = \log(|X|) \).
+
+    \item[(iii)] Axiom 3 Chain Rule: Same as the discrete case. 
+\begin{shaded}
+Applying this, we get:\\
+\begin{flalign*}
+h[X]\simeq h[Z^{\Delta X}] &= H[Y^{\Delta X}] + \mathbb{E}_y[\underbrace{h[Z^{\Delta X} | Y^{\Delta X} = y]}_{\text{uniform bin width \( {\Delta X}(y) \)}}]
+&&[\text{where \( {\Delta X} \to 0 \), \( Z^{\Delta X} \to X \).}]
+\\
+&= H[Y^{\Delta X}] + \mathbb{E}_{Y^{\Delta X}}[\log\left\{{\Delta X} (Y^{\Delta X})\right\}]
+\end{flalign*}
+\end{shaded}
+\end{enumerate}

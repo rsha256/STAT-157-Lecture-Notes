@@ -1,0 +1,69 @@
+\section{Thursday, March 1st}
+\subsection{The Emergence of the Logarithm in Information Theory}
+
+Today we will show that the logarithm appears due to the smoothness/continuity axiom as well as the chain rule axiom. Given the assumption of continuity, we know that the (microscopic event model — from thermodynamic statistical mechanics). If \( p=[5/8, 1/4, 1/8] \).
+
+\subsection{Optimizing Codings and Tree Representations}
+
+Then we will look at optimizing codings/tree representations of encoding and bounds on the best you can do:
+\begin{itemize}
+    \item Kraft's Inequality
+    \item Entropy as efficiency bound
+    \item Towards optimality…
+\end{itemize}
+
+\subsection{The Chain Rule and Its Implications}
+
+If groups of \( Y \) filter to a unique \( X \), \( Y \sim \text{Unif}[1, M] \), \( X=x(Y) \). Then \( U[X, Y] = U[Y] = U[X] + U[Y | X] \). But we have asymmetry:
+\[ U[X] = u(M) - \sum_j P(X = x_j) \cdot u(m_j) \]
+thus \( U[\cdot] \) isn't specified by how \( u \) behaves on equally likely outcomes.
+
+We define \( \{u(m)\} = U[\text{uniform dist. over } m \text{ outcomes}] \). Suppose \( m=kl \), \( m,k,l \in \mathbb{Z} \).
+e.g., \( m=10 \), \( k=5 \), \( l=2 \). Then we can partition the top row of \( m=10 \) events into \( l=2 \) sets which each contain \( k=5 \) things. Chain rule: \( u(m) = u(kl) = U[X] + U[Y | X] \)
+\[ = u(l) + \mathbb{E}_x [U(Y | X= x)] \]
+\[ = u(l) + \mathbb{E}_x [u(k)] = u(k) + u(l) \].
+\[ u(m) = u(kl) = u(k) + u(l) \].
+
+\( u=\log \) is then forced upon us as logs turn multiplication into addition.
+
+Or more rigorously, suppose \( m= D^l \) for some \( D, l \in \mathbb{Z} \), e.g., \( m=8 \) equally likely things. This can be done as 4 sets, each of size 2, which using the chain rule gives us that \( u(D^{l-1}) + u(D) \). 
+We can then recurse, each time lowering the largest exponent (which was originally \( l \)) by 1. This means the depth of our tree will be \( l \).
+\[ u(m) = u(D^l) = u(D \cdot D^{l-1}) = u(D^{l-1}) + u(D) = u(D^{l-2}) + u(D) + u(D) = \ldots = l \cdot u(D) + u(1) \]
+and we know that \( u(1)=0 \) per Khinchin’s Axiom.
+Now we have \( u(D^l) = l \cdot u(D) \), which we also could’ve got without the axiom if we only recurse \( l-1 \) times as \( u(D^{l-(l-1)})=u(D) \). Thus \( u(D^l) = \log_D(m) \cdot u(D) = m=D^l \),
+then it must be true that \( U[\text{uniform distribution over } |X|] \) is proportional to \( \log(|X|) \).
+
+\subsection{Coding}
+
+A set of \( \mathcal{X} \) represents, \( X \in \mathcal{X} \), \( X \sim p \), \( |X| < \infty \) (we extend in the textbook to countably infinite sets).
+Define: a code \( C: \mathcal{X} \mapsto D^k \), where:
+\begin{enumerate}
+    \item \( D^* = \) \{set of all possible strings with symbols in a \( d \)-ary alphabet\}
+    \item \( c(x) = \) codeword for \( x \), e.g., \( c(x) = 0110 \) ⟺ each symbol is specifying a choice in the tree
+    \item \( l(x) = |c(x)| = \) length of codeword = number of symbols used ⟺ number of questions answered = the length of the path
+\end{enumerate}
+Define: \( L = \mathbb{E}_{X \sim p}[l(X)] \quad\iff\) \text{ average number of steps needed.}
+
+\subsection{Instantaneous Codes (Prefix Codes)}
+
+\begin{itemize}
+    \item A mapping \( \{x_1, x_2, x_3, x_4, \ldots\} \mapsto C^* \) where \( C(\{x_1, x_2, x_3, \ldots\}) = c(x_1) c(x_2) c(x_3) \ldots \)
+    \item Non-singular: \( x \neq x' \implies c(x) \neq c(x') \)
+    \item No prefixes: No codeword is the prefix of another, meaning all codewords are leaves of the tree.
+    \item Example: \( c(x_1) = [0, 0, 1] \), \( c(x_2) = [0, 0, 1, 1] \)
+\end{itemize}
+
+We can draw a binary tree with 0 as up and 1 as down, to represent this coding scheme.
+
+\subsection{Kraft's Inequality}
+
+Kraft's inequality states that for a finite or countably infinite set of outcomes \( \mathcal{X} \) you want to encode, and a \( D \)-ary dictionary, then all instantaneous codes must satisfy:
+\[ \sum_{i=1}^n D^{-\ell_i} \leq 1. \]
+
+Conversely, for any given set of natural numbers \( \ell_1, \ell_2, \ldots, \ell_n \) that satisfy the above inequality, there exists a uniquely decodable code over an alphabet of size \( D \) with those codeword lengths. This applies to all uniquely decodable codes, which include instantaneous codes.
+
+Even better, there's a recipe to build such a code!
+
+\subsection{Quiz Time!}
+
+\emph{This section is left intentionally blank for the quiz content.}
